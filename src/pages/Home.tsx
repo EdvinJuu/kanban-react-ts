@@ -12,7 +12,6 @@ const Home = () => {
   const { tasks } = useTasks();
   return (
     <>
-      {" "}
       <Navbar />
       <Board title="Boared heheeh" id={0}>
         <List title="BIG LIST TITLE!" id={0} boardId={0} totalTasks={3}>
@@ -88,4 +87,4 @@ const Home = () => {
   );
 };
 
-export default Home
+export default Home;
