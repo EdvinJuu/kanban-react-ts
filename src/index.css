@@ -4,11 +4,11 @@
 @layer base {
 }
 
-@layer components {
+/* @layer components {
   .drop-zone {
     @apply ;
   }
-}
+} */
 
-@layer utilities {
-}
+/* @layer utilities {
+} */

@@ -24,16 +24,14 @@ const Test = () => {
   const [boundingRectLeft, setBoundingRectLeft] = useState(0);
   const [distToList, setDistToList] = useState([0, 0]);
 
-
   // INITIALIZE
   useEffect(() => {
     const elements = Array.from(document.getElementsByClassName("drop-zone"));
     const positionsX = elements.map((e) => e.getBoundingClientRect().left);
     const positionsY = elements.map((e) => e.getBoundingClientRect().top);
-    
-    return setDistToList([positionsX[0], positionsY[0]]);
-  }, [])
 
+    return setDistToList([positionsX[0], positionsY[0]]);
+  }, []);
 
   // GETS MOUSE POSITION
   useEffect(() => {
@@ -54,8 +52,6 @@ const Test = () => {
 
       // get drop-zones y-axis position
       const positionsY = elements.map((e) => e.getBoundingClientRect().top);
-      const positionsX = elements.map((e) => e.getBoundingClientRect().left);
-      const positions = [positionsX, positionsY];
 
       // gets difference between mouse y pos and each element
       const absDifferences = positionsY.map((v) => Math.abs(v - mouse[1]));
@@ -87,7 +83,7 @@ const Test = () => {
     return l
   } */
 
-  function moveItem<T>(list: T[], from: number, toGap: number): T[] {
+  function moveItem<T>(list: T[], from: number, toGap: number): T[] { // Claude solution different from tutorial, to avoid bloated code
     // copy list into variable
     const copy = [...list];
 
@@ -115,7 +111,7 @@ const Test = () => {
 
     document.addEventListener("mouseup", handler);
     return () => document.removeEventListener("mouseup", handler);
-  });
+  }, [dragged, dropZone] );
 
   /* Base Classes */
   const listItemBase = clsx(" w-50 whitespace-nowrap cursor-pointer");
@@ -141,26 +137,35 @@ const Test = () => {
 
       {/* Main List */}
       <div className="flex flex-col justify-center text-center border w-fit mt-8 mx-auto">
+        {/* drop zone before all items */}
         <div
-                  className={`${dragged === null || dropZone !== 0 ? `${listItemHidden}` : "h-7"}  ${listItemBase} ${listItemDropZone} bg-gray-400`}
-                />
-        {/* drop zone before all items(?) */}
+          className={`${dragged === null || dropZone !== 0 ? `${listItemHidden}` : "h-7"}  ${listItemBase} ${listItemDropZone} bg-gray-400`}
+        />
+
         {items.map((value, index) => (
           <>
             {dragged !== index && (
               <>
+                {/* List Card */}
                 <div
                   key={value}
                   className={` ${listItemBase} h-7 border bg-white`}
                   onMouseDown={(e) => {
                     e.preventDefault();
                     setDragged(index);
-                    setBoundingRectTop((mouse[1] % 28) - distToList[1]);
-                    setBoundingRectLeft(mouse[0] - distToList[0]);
+
+                    /* Opencode solution, good simplification */
+                    const rect = e.currentTarget.getBoundingClientRect()
+                    setBoundingRectLeft(e.clientX - rect.left);
+                    setBoundingRectTop(e.clientY - rect.top);
+                    /* 
+                    setBoundingRectTop((mouse[1] - distToList[1]) % 28 );
+                    setBoundingRectLeft(mouse[0] - distToList[0]); */
                   }}
                 >
                   {value}
                 </div>
+                  {/* Drop zone */}
                 <div
                   className={`${dragged === null || dropZone !== index + 1 ? `${listItemHidden}` : "h-7"}  ${listItemBase} ${listItemDropZone} bg-gray-400`}
                 />
@@ -174,7 +179,7 @@ const Test = () => {
         {boundingRectLeft} - {mouse[0]} = {boundingRectLeft}
       </p>
       <p>drop zone: {dropZone}</p>
-       <p>dragged: {dragged === null ? "Null" : dragged}</p>
+      <p>dragged: {dragged === null ? "Null" : dragged}</p>
     </>
   );
 };
