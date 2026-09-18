@@ -116,7 +116,7 @@ const Test = () => {
   /* Base Classes */
   const listItemBase = clsx(" w-50 whitespace-nowrap cursor-pointer");
   const listItemDropZone = clsx(
-    "transition-[height,padding] duration-120 ease-in-out overflow-hidden drop-zone",
+    "overflow-hidden drop-zone",
   );
   const listItemHidden = clsx("text-gray-700 p-0");
 
@@ -154,7 +154,7 @@ const Test = () => {
                     e.preventDefault();
                     setDragged(index);
 
-                    /* Opencode solution, good simplification */
+                    /* Opencode solution, good simplification instead of 2 functions handling it */
                     const rect = e.currentTarget.getBoundingClientRect()
                     setBoundingRectLeft(e.clientX - rect.left);
                     setBoundingRectTop(e.clientY - rect.top);
@@ -181,6 +181,7 @@ const Test = () => {
       <p>drop zone: {dropZone}</p>
       <p>dragged: {dragged === null ? "Null" : dragged}</p>
     </>
+    
   );
 };
 
