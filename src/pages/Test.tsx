@@ -2,16 +2,16 @@ import clsx from "clsx";
 import { useEffect, useState } from "react";
 
 const testItems = [
-  "You asked if",
-  "you could see me",
-  "before I went to",
-  "Spain, you didn't",
-  "give a reason didn't",
-  "know what you would",
-  "say. But I was hoping",
-  "that my breath on your",
-  "face would blow every",
-  "last thing into place",
+  "1. You asked if",
+  "2. you could see me",
+  "3. before I went to",
+  "4. Spain, you didn't",
+  "5. give a reason didn't",
+  "6. know what you would",
+  "7. say. But I was hoping",
+  "8. that my breath on your",
+  "9. face would blow every",
+  "10. last thing into place",
 ];
 
 // https://dev.to/h8moss/build-a-reorderable-list-in-react-29on
@@ -59,31 +59,15 @@ const Test = () => {
       // get the items closest to mouse
       let result = absDifferences.indexOf(Math.min(...absDifferences));
 
-      // if the item is below the dragged item, add 1 to the index
-      if (result > dragged) result += 1;
-      /* We have to add 1 to the items dragged because this code does
-        not account for the box right below the currently dragged item,
-        as that box is currently non-existant (because of the conditional
-        rendering we added earlier), our index will be 1 number too low
-        if we are above the currently dragged item. */
+      if (result > dragged) result /* += 1 */;
 
       setDropZone(result);
       /* setDistToList(positionsX[0]); */
     }
   }, [dragged, mouse]);
 
-  /*   const reorderList = <T,>(l: T[], start: number, end: number) => {
-    // Save start index before it gets overwritten in the loop
-    const temp = l[start];
-
-    for (let i=start; i<end; i++) {
-      l[i] = l[i+1];
-    }
-    l[end - 1] = temp
-    return l
-  } */
-
-  function moveItem<T>(list: T[], from: number, toGap: number): T[] { // Claude solution different from tutorial, to avoid bloated code
+  function moveItem<T>(list: T[], from: number, toGap: number): T[] {
+    // Claude solution different from tutorial, to avoid bloated code
     // copy list into variable
     const copy = [...list];
 
@@ -95,6 +79,8 @@ const Test = () => {
     //  If you plucked it from after the gap, the gap didn't move, so leave it alone.
     copy.splice(toGap > from ? toGap - 1 : toGap, 0, item); // splicing with 0 items removed is just a pure insertion
 
+    // - 2 DOESNT WORK GOING UP LIST, : TOGAP WOULD NEED TO BE OFFSET TOO BUT WONT LOOK GOOD
+
     return copy;
   }
 
@@ -103,7 +89,7 @@ const Test = () => {
     const handler = (e: MouseEvent) => {
       if (dragged !== null) {
         e.preventDefault();
-        setDragged(null);
+        setDragged(null); 
 
         setItems((items) => moveItem([...items], dragged, dropZone));
       }
@@ -111,14 +97,14 @@ const Test = () => {
 
     document.addEventListener("mouseup", handler);
     return () => document.removeEventListener("mouseup", handler);
-  }, [dragged, dropZone] );
+  }, [dragged, dropZone]);
 
   /* Base Classes */
   const listItemBase = clsx(" w-50 whitespace-nowrap cursor-pointer");
-  const listItemDropZone = clsx(
-    "overflow-hidden drop-zone",
-  );
-  const listItemHidden = clsx("text-gray-700 p-0");
+  const listItemDropZone = clsx("overflow-hidden drop-zone");
+  const listItemHidden = clsx("text-gray-700 p-0 h-0");
+  const listItemTransition = clsx("transition-all duration-150 overflow-hidden")
+
 
   return (
     <>
@@ -144,7 +130,7 @@ const Test = () => {
 
         {items.map((value, index) => (
           <>
-            {dragged !== index && (
+            {/* dragged !== index &&  */(
               <>
                 {/* List Card */}
                 <div
@@ -155,7 +141,7 @@ const Test = () => {
                     setDragged(index);
 
                     /* Opencode solution, good simplification instead of 2 functions handling it */
-                    const rect = e.currentTarget.getBoundingClientRect()
+                    const rect = e.currentTarget.getBoundingClientRect();
                     setBoundingRectLeft(e.clientX - rect.left);
                     setBoundingRectTop(e.clientY - rect.top);
                     /* 
@@ -165,9 +151,9 @@ const Test = () => {
                 >
                   {value}
                 </div>
-                  {/* Drop zone */}
+                {/* Drop zone */}
                 <div
-                  className={`${dragged === null || dropZone !== index + 1 ? `${listItemHidden}` : "h-7"}  ${listItemBase} ${listItemDropZone} bg-gray-400`}
+                  className={`${dragged === null || dropZone !== index + 1 ? `${listItemHidden}` : "h-7"} ${listItemTransition}  ${listItemBase} ${listItemDropZone} bg-gray-400`}
                 />
                 {/* index+1 accounts for the dropZone on top */}
               </>
@@ -180,8 +166,8 @@ const Test = () => {
       </p>
       <p>drop zone: {dropZone}</p>
       <p>dragged: {dragged === null ? "Null" : dragged}</p>
+      <p>list total: {items.length}</p>
     </>
-    
   );
 };
 

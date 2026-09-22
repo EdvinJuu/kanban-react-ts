@@ -1,45 +1,132 @@
 import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
-import type { TaskProps } from "../types/types";
+import type { Task } from "../types/types";
 
-const testTasks: TaskProps[] = [
+const testTasks: Task[] = [
   {
-    description: "bebop",
+    description: "0. bebop",
     id: 0,
-    parentId: 0,
-    listPosition: 0,
+    parentId: null,
     isCompleted: true,
     isEditing: true,
   },
   {
-    description: "bebop",
+    description: "1. bebop",
     id: 1,
     parentId: 0,
-    listPosition: 0,
     isCompleted: true,
     isEditing: false,
   },
   {
-    description: "bebop",
+    description: "2. bebop",
     id: 2,
-    parentId: 0,
-    listPosition: 0,
+    parentId: 1,
     isCompleted: true,
     isEditing: true,
   },
   {
-    description: "bebop",
-    id: 3,
+    description: "3. bebop",
+    id: 4,
+    parentId: 2,
+    isCompleted: true,
+    isEditing: true,
+  },
+  {
+    description: "3. bebop",
+    id: 5,
     parentId: 0,
-    listPosition: 0,
+    isCompleted: true,
+    isEditing: true,
+  },
+  {
+    description: "3. bebop",
+    id: 6,
+    parentId: null,
+    isCompleted: true,
+    isEditing: true,
+  },
+  {
+    description: "3. bebop",
+    id: 7,
+    parentId: 8,
+    isCompleted: true,
+    isEditing: true,
+  },
+  {
+    description: "3. bebop",
+    id: 8,
+    parentId: 4,
+    isCompleted: true,
+    isEditing: true,
+  },
+  {
+    description: "3. bebop",
+    id: 9,
+    parentId: 1,
+    isCompleted: true,
+    isEditing: true,
+  },
+  {
+    description: "3. bebop",
+    id: 10,
+    parentId: 11,
+    isCompleted: true,
+    isEditing: true,
+  },
+  {
+    description: "3. bebop",
+    id: 11,
+    parentId: 9,
+    isCompleted: true,
+    isEditing: true,
+  },
+  {
+    description: "3. bebop",
+    id: 12,
+    parentId: null,
+    isCompleted: true,
+    isEditing: true,
+  },
+  {
+    description: "3. bebop",
+    id: 13,
+    parentId: 12,
+    isCompleted: true,
+    isEditing: true,
+  },
+  {
+    description: "3. bebop",
+    id: 14,
+    parentId: 12,
+    isCompleted: true,
+    isEditing: true,
+  },
+  {
+    description: "3. bebop",
+    id: 15,
+    parentId: 12,
+    isCompleted: true,
+    isEditing: true,
+  },
+  {
+    description: "3. bebop",
+    id: 16,
+    parentId: 3,
+    isCompleted: true,
+    isEditing: true,
+  },
+  {
+    description: "3. bebop",
+    id: 17,
+    parentId: 7,
     isCompleted: true,
     isEditing: true,
   },
 ];
 
 interface TaskContextType {
-  tasks: TaskProps[];
-  setTasks: React.Dispatch<React.SetStateAction<TaskProps[]>>;
+  tasks: Task[];
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
 const TasksContext = createContext<TaskContextType | undefined>(undefined);

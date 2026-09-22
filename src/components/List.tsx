@@ -1,16 +1,10 @@
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import { useTasks } from "../context/TaskContext";
-import type { TaskProps } from "../types/types";
+import type { TaskProps, ListProps } from "../types/types";
 
-interface listProps {
-  id: number;
-  boardId: number; // fix foreignKey
-  title: string;
-  totalTasks: number;
-  children?: ReactNode;
-}
 
-const List = ({ title, id:parentId, children }: listProps) => {
+
+const List = ({ title, id:parentId, children }: ListProps) => {
   const { tasks, setTasks } = useTasks();
 
   const [addTaskDescription, setAddTaskDescription] = useState("");
@@ -23,9 +17,10 @@ const List = ({ title, id:parentId, children }: listProps) => {
       listPosition: 0,
       isCompleted: false,
       isEditing: false,
+      isParent: false,
     };
 
-    setTasks([...tasks, newTask]);
+    return setTasks([...tasks, newTask]);
     /* setAddTaskDescription("") */
   }
 
@@ -34,13 +29,13 @@ const List = ({ title, id:parentId, children }: listProps) => {
       <h2>{title}</h2>
       <div className="p-2">
         {children}
-        <form>
+        <div>
           <input
             placeholder="Write task description"
             onChange={(e) => setAddTaskDescription(e.target.value)}
           />
           <button  onClick={handleOnClick}>Add Task</button>
-        </form>
+        </div>
       </div>
     </div>
   );

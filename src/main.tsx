@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App.tsx";
 import { TasksProvider } from "./context/TaskContext.tsx";
 import { BrowserRouter } from "react-router";
-
+// look into ReactDOM and implement
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
