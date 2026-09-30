@@ -1,144 +1,155 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useId, useState } from "react";
 import type { ReactNode } from "react";
 import type { Task } from "../types/types";
 
-const testTasks: Task[] = [
+/* const testTasks: Task[] = [
   {
     description: "0. bebop",
-    id: 0,
+    id: useId(),
     parentId: null,
     isCompleted: true,
     isEditing: true,
   },
   {
     description: "1. bebop",
-    id: 1,
+    id: useId(),
     parentId: 0,
     isCompleted: true,
     isEditing: false,
   },
   {
     description: "2. bebop",
-    id: 2,
+    id: useId(),
     parentId: 1,
     isCompleted: true,
     isEditing: true,
   },
   {
     description: "3. bebop",
-    id: 4,
+    id: useId(),
     parentId: 2,
     isCompleted: true,
     isEditing: true,
   },
   {
     description: "3. bebop",
-    id: 5,
+    id: useId(),
     parentId: 0,
     isCompleted: true,
     isEditing: true,
   },
   {
     description: "3. bebop",
-    id: 6,
+    id: useId(),
     parentId: null,
     isCompleted: true,
     isEditing: true,
   },
   {
     description: "3. bebop",
-    id: 7,
+    id: useId(),
     parentId: 8,
     isCompleted: true,
     isEditing: true,
   },
   {
     description: "3. bebop",
-    id: 8,
+    id: useId(),
     parentId: 4,
     isCompleted: true,
     isEditing: true,
   },
   {
     description: "3. bebop",
-    id: 9,
+    id: useId(),
     parentId: 1,
     isCompleted: true,
     isEditing: true,
   },
   {
     description: "3. bebop",
-    id: 10,
+    id: useId(),
     parentId: 11,
     isCompleted: true,
     isEditing: true,
   },
   {
     description: "3. bebop",
-    id: 11,
+    id: useId(),
     parentId: 9,
     isCompleted: true,
     isEditing: true,
   },
   {
     description: "3. bebop",
-    id: 12,
+    id: useId(),
     parentId: null,
     isCompleted: true,
     isEditing: true,
   },
   {
     description: "3. bebop",
-    id: 13,
+    id: useId(),
     parentId: 12,
     isCompleted: true,
     isEditing: true,
   },
   {
     description: "3. bebop",
-    id: 14,
+    id: useId(),
     parentId: 12,
     isCompleted: true,
     isEditing: true,
   },
   {
     description: "3. bebop",
-    id: 15,
+    id: useId(),
     parentId: 12,
     isCompleted: true,
     isEditing: true,
   },
   {
     description: "3. bebop",
-    id: 16,
+    id: useId(),
     parentId: 3,
     isCompleted: true,
     isEditing: true,
   },
   {
     description: "3. bebop",
-    id: 17,
+    id: useId(),
     parentId: 7,
     isCompleted: true,
     isEditing: true,
   },
-];
+]; */
 
 interface TaskContextType {
   tasks: Task[];
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+  uniqueId: number
+  setUniqueId: React.Dispatch<React.SetStateAction<number>>;
 }
+
+  const testTasks2: Task[] = [
+
+  ];
 
 const TasksContext = createContext<TaskContextType | undefined>(undefined);
 
 export function TasksProvider({ children }: { children: ReactNode }) {
+  const [uniqueId, setUniqueId] = useState(0);
+
+
+
+
   const [tasks, setTasks] = useState(
     // add function to check DB for tasks, otherwise return some default state
-    testTasks,
+    testTasks2,
   );
 
   return (
-    <TasksContext.Provider value={{ tasks, setTasks }}>
+    <TasksContext.Provider value={{ tasks, setTasks, uniqueId, setUniqueId }}>
       {children}
     </TasksContext.Provider>
   );

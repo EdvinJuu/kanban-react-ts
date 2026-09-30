@@ -1,10 +1,9 @@
-import type { ReactNode } from "react";
 
 export interface Task {
   id: number;
   parentId: number | null;
   description: string;
-  isCompleted: boolean;
+  isCompleted: boolean; 
   isEditing: boolean;
 }
 
@@ -14,7 +13,7 @@ export interface TaskRecursionProps extends Task {
   maxDepth: number;
 }
 
-export interface ListProps {
+/* export interface ListProps {
   id: number;
   boardId: number; // fix foreignKey
   title: string;
@@ -22,7 +21,7 @@ export interface ListProps {
   children?: ReactNode;
 }
 
-
+ */
 /* 
 // https://stackoverflow.com/questions/37688318/typescript-interface-possible-to-make-one-or-the-other-properties-required
 export interface TaskWithParent extends TaskNoParent {
