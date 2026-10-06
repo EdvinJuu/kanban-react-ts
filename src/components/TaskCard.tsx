@@ -1,7 +1,7 @@
 import { useId, useState } from "react";
 import type { Task, TaskRecursionProps } from "../types/types";
 import { useTasks } from "../context/TaskContext";
-import { CheckIconActive, CheckIconInactive } from "./Icons";
+import { EditIcon, CheckIconInactive } from "./Icons";
 import clsx from "clsx";
 
 const TaskCard = ({
@@ -45,21 +45,22 @@ const TaskCard = ({
       isEditing: false,
     };
     setTasks([...tasks, newTask]);
-    setIsAdding(false)
+    setIsAdding(false);
   }
-  const taskCardBaseClass = clsx(
-    `py-1 px-4 text-white rounded-xl min-w-60 h-fit`,
-  );
+  /*   const taskCardBaseClass = clsx(
+    `py-1 px-4 text-accent rounded-xl min-w-60 h-fit`,
+  ); */
 
   return (
     <li
-      className={`${depth % 2 === 0 ? `bg-[#212121]` : `bg-[#3A3A3A]`} ${taskCardBaseClass} text-white rounded-xl ${isEditing && `border`}`}
+      className={`${depth % 2 === 0 ? `bg-primary` : `bg-secondary`}
+      py-1 px-4 min-w-60 h-fit text-accent rounded-xl ${isEditing && `border border-amber-600`}`}
       onDoubleClick={(e) => handleEditOnClick(e, true)}
     >
       <div className=" flex w-full mb-5">
         {isEditing ? (
           <input
-            className={`${depth % 2 === 0 ? `bg-[#3A3A3A]` : `bg-[#212121]`} w-full`}
+            className={`${depth % 2 === 0 ? `bg-secondary` : `bg-primary`} w-full`}
             value={editedDescription}
             onChange={(e) => setEditedDescription(e.target.value)}
           />
@@ -68,7 +69,7 @@ const TaskCard = ({
         )}
         {isEditing && (
           <button onClick={(e) => handleEditOnClick(e, false)}>
-            <CheckIconInactive />
+            <EditIcon />
           </button>
         )}
       </div>

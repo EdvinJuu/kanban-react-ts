@@ -1,4 +1,5 @@
 
+1
 export interface Task {
   id: number;
   parentId: number | null;
@@ -11,6 +12,12 @@ export interface TaskRecursionProps extends Task {
   taskMap: Map<number | null, Task[]>;
   depth: number;
   maxDepth: number;
+}
+
+export interface BoardProps {
+  id: number;
+  title: string;
+  tasks: Task[];
 }
 
 /* export interface ListProps {
