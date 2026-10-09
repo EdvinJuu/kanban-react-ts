@@ -1,7 +1,7 @@
 import { useId, useState } from "react";
 import type { Task, TaskRecursionProps } from "../types/types";
 import { useTasks } from "../context/TaskContext";
-import { EditIcon, CheckIconInactive } from "./Icons";
+import { EditIcon, CheckIconInactive } from "./elements/Icons";
 import clsx from "clsx";
 
 const TaskCard = ({
@@ -28,7 +28,7 @@ const TaskCard = ({
     setIsEditing(editingState);
   }
 
-  function handleAddTaskOnClick(
+  function handleAddTaskOnClick( // CONSIDER MOVING THIS TO SERVER SIDE, SO ONLY SEND ADD REQUEST?
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) {
     e.stopPropagation();
@@ -93,7 +93,7 @@ const TaskCard = ({
           ))}
         </ul>
       )}
-      {isEditing &&
+      {isEditing && depth < maxDepth &&
         (isAdding ? (
           <div className="p-2">
             <input

@@ -17,7 +17,7 @@ export interface TaskRecursionProps extends Task {
 export interface BoardProps {
   id: number;
   title: string;
-  tasks: Task[];
+  content: Task[];
 }
 
 /* export interface ListProps {
