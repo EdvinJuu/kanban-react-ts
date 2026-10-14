@@ -1,8 +1,9 @@
-import { useId, useState } from "react";
+import React, { useState } from "react";
 import type { Task, TaskRecursionProps } from "../types/types";
-import { useTasks } from "../context/TaskContext";
 import { EditIcon, CheckIconInactive } from "./elements/Icons";
-import clsx from "clsx";
+import { useCreateTasks } from "../hooks/useCreateTask";
+import { useDeleteTask } from "../hooks/useDeleteTask";
+import { useUpdateTask } from "../hooks/useUpdateTask";
 
 const TaskCard = ({
   description,
@@ -10,15 +11,22 @@ const TaskCard = ({
   taskMap,
   depth,
   maxDepth,
+  onTasksAdded,
+  onTaskDeleted,
+  onTaskUpdated,
 }: TaskRecursionProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [editedDescription, setEditedDescription] = useState(description);
   const [addTaskDescription, setAddTaskDescription] = useState("");
 
-  const { tasks, setTasks, uniqueId, setUniqueId } = useTasks(); // Remove tasks later when implementing callback and memo. Won't be needed. if needed you are doing something wrong.
+  const { createTask } = useCreateTasks();
+  const { deleteTask } = useDeleteTask();
+  const { updateTask } = useUpdateTask();
 
   const children = taskMap.get(id) ?? null;
+
+  /* const children = taskMap.get(id) ?? null; */
 
   function handleEditOnClick(
     e: React.MouseEvent<HTMLElement, MouseEvent>,
@@ -28,33 +36,66 @@ const TaskCard = ({
     setIsEditing(editingState);
   }
 
-  function handleAddTaskOnClick( // CONSIDER MOVING THIS TO SERVER SIDE, SO ONLY SEND ADD REQUEST?
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) {
+  async function handleAddTaskOnClick(e: React.MouseEvent) {
+    // do i need to have 2 functions at different levels? can I combine them?
     e.stopPropagation();
-    if (addTaskDescription.length <= 0) return;
-    const newId = uniqueId + 1; // REPLACE THIS ID SYSTEM WITH SOMETHING THAT WORKS OVER SERVER BETTER
-    setUniqueId(newId);
+    if (addTaskDescription.trim().length <= 0)
+      return console.error("You need to add a description");
 
-    if (typeof id !== "number") return console.error("the id is not a number");
-    const newTask: Task = {
-      description: addTaskDescription,
-      id: newId, // needs to be made unique
-      parentId: id,
-      isCompleted: false,
-      isEditing: false,
-    };
-    setTasks([...tasks, newTask]);
-    setIsAdding(false);
+    const created = await createTask(addTaskDescription, id);
+
+    if (created) {
+      onTasksAdded(created);
+      setAddTaskDescription("");
+      setIsAdding(false);
+    }
   }
-  /*   const taskCardBaseClass = clsx(
-    `py-1 px-4 text-accent rounded-xl min-w-60 h-fit`,
-  ); */
+
+  async function handleDeleteTaskOnClick(e: React.MouseEvent) {
+    e.stopPropagation();
+
+    // if children(or empty list) is above 0 return true. adding the conditional check(... > 0) makes it boolean
+    const hasChildren = (children ?? []).length > 0;
+
+    // if it has children and we confirm through the popup continue, otherwise end function early.
+    if (
+      hasChildren &&
+      !window.confirm("This will delete all the tasks inside it. Continue?")
+    ) {
+      return;
+    }
+
+    const deletedIds = await deleteTask(id);
+
+    // if deletedIds happened update content in Home component.
+    if (deletedIds) {
+      console.log(deletedIds);
+      onTaskDeleted(deletedIds);
+    }
+  }
+
+  async function handleUpdateTaskOnClick(e: React.MouseEvent) {
+    e.stopPropagation();
+
+    const trimmed = editedDescription.trim()
+
+    if (!trimmed || trimmed === description) {
+      setEditedDescription(description)
+      setIsEditing(false);
+      return
+    }
+    const updated = await updateTask(id, {description: editedDescription});
+  
+      if (updated) {
+      onTaskUpdated(updated);
+      setIsEditing(false);
+    }
+  }
 
   return (
     <li
       className={`${depth % 2 === 0 ? `bg-primary` : `bg-secondary`}
-      py-1 px-4 min-w-60 h-fit text-accent rounded-xl ${isEditing && `border border-amber-600`}`}
+      py-1 px-4 min-w-60 h-fit text-accent rounded-xl ${isEditing ? `border border-amber-600` : ""}`}
       onDoubleClick={(e) => handleEditOnClick(e, true)}
     >
       <div className=" flex w-full mb-5">
@@ -80,20 +121,24 @@ const TaskCard = ({
         <ul className="mb-2 flex flex-col gap-3">
           {children.map((child) => (
             <TaskCard
-              description={child.description} // HOOK THIS UP
-              isEditing={false} // HOOK THIS UP
-              isCompleted={false} // HOOK THIS UP
+              description={child.description}
+              isEditing={false}
+              isCompleted={child.isCompleted}
               key={child.id}
               id={child.id}
               parentId={child.parentId}
               taskMap={taskMap}
               depth={depth + 1}
               maxDepth={maxDepth}
+              onTasksAdded={onTasksAdded}
+              onTaskDeleted={onTaskDeleted}
+              onTaskUpdated={onTaskUpdated}
             />
           ))}
         </ul>
       )}
-      {isEditing && depth < maxDepth &&
+      {isEditing &&
+        depth < maxDepth &&
         (isAdding ? (
           <div className="p-2">
             <input
@@ -114,6 +159,8 @@ const TaskCard = ({
             Add new card ...
           </p>
         ))}
+      <button onClick={(e) => handleDeleteTaskOnClick(e)}>Delete Task</button>
+      <button onClick={(e) => handleUpdateTaskOnClick(e)}>Update Task</button>
     </li>
 
     /*       {isParent && <div>

@@ -1,11 +1,13 @@
-
-1
+1;
 export interface Task {
   id: number;
   parentId: number | null;
   description: string;
-  isCompleted: boolean; 
+  isCompleted: boolean;
   isEditing: boolean;
+  onTasksAdded: (task: Task) => void;
+  onTaskDeleted: (deletedIds: number[]) => void;
+  onTaskUpdated: (updated: Task) => void;
 }
 
 export interface TaskRecursionProps extends Task {
@@ -17,7 +19,10 @@ export interface TaskRecursionProps extends Task {
 export interface BoardProps {
   id: number;
   title: string;
-  content: Task[];
+  tasks: Map<number | null, Task[]>;
+  onTasksAdded: (task: Task) => void;
+  onTaskDeleted: (deletedIds: number[]) => void;
+  onTaskUpdated: (updated: Task) => void;
 }
 
 /* export interface ListProps {

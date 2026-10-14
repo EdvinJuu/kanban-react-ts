@@ -11,6 +11,7 @@ export const useReadTasks = () => {
   useEffect(() => {
     const loadTasks = async () => {
       setIsLoading(true);
+      setError(null)
 
       try {
         const response = await fetch(API_URL);
@@ -28,5 +29,5 @@ export const useReadTasks = () => {
     
     loadTasks()
   }, []);
-  return { content, error, isLoading };
+  return { content, setContent, error, isLoading };
 };
