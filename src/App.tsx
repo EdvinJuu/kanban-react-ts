@@ -1,13 +1,19 @@
 import { Routes, Route } from "react-router";
 import Home from "./pages/Home";
-import Test from "./pages/Test";
+import Login from "./pages/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/test" element={<Test />} />
+        <Route path="/login" element={<Login />} />
+
+
+      {/* ProtectedRoute to only let you access if you are logged in */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<Home />} />
+        </Route>
       </Routes>
     </>
   );

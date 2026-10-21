@@ -1,4 +1,4 @@
-1;
+
 export interface Task {
   id: number;
   parentId: number | null;
@@ -8,6 +8,7 @@ export interface Task {
   onTasksAdded: (task: Task) => void;
   onTaskDeleted: (deletedIds: number[]) => void;
   onTaskUpdated: (updated: Task) => void;
+  onTaskChanged: (id: number, changes: Partial<Task>) => void;
 }
 
 export interface TaskRecursionProps extends Task {
@@ -23,6 +24,15 @@ export interface BoardProps {
   onTasksAdded: (task: Task) => void;
   onTaskDeleted: (deletedIds: number[]) => void;
   onTaskUpdated: (updated: Task) => void;
+  onTaskChanged: (id: number, changes: Partial<Task>) => void;
+}
+
+export interface User {
+
+}
+
+export interface AuthResponse {
+  
 }
 
 /* export interface ListProps {

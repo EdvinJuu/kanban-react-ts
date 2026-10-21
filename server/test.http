@@ -1,0 +1,38 @@
+POST http://localhost:5000/api/register
+Content-Type: application/json
+
+{ "username": "anna", "password": "password123" }
+
+###
+
+POST http://localhost:5000/api/register
+Content-Type: application/json
+
+{ "username": "baba", "password": "password123" }
+
+###
+
+POST http://localhost:5000/api/login
+Content-Type: application/json
+
+{ "username": "anna", "password": "password123" }
+
+###
+
+POST http://localhost:5000/api/login
+Content-Type: application/json
+
+{ "username": "baba", "password": "password123" }
+
+###
+
+GET http://localhost:5000/api/tasks
+Authorization: Bearer d78c2199aa111ce16d4e89748ead777b0de1f7da7db64d94a346a3a7a49bcc8f
+
+###
+
+POST http://localhost:5000/api/tasks
+Content-Type: application/json
+Authorization: Bearer bdb246e2435fc0c90c94988d2871fc75a752374c325204909fc0d36355dfa8be
+
+{ "description": "Anna can't see this" }

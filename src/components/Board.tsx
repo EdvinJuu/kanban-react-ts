@@ -9,6 +9,7 @@ const Board = ({
   onTasksAdded,
   onTaskDeleted,
   onTaskUpdated,
+  onTaskChanged,
 }: BoardProps) => {
   const [addTaskDescription, setAddTaskDescription] = useState("");
   const [isAdding, setIsAdding] = useState(false);
@@ -49,6 +50,7 @@ const Board = ({
             onTasksAdded={onTasksAdded}
             onTaskDeleted={onTaskDeleted}
             onTaskUpdated={onTaskUpdated}
+            onTaskChanged={onTaskChanged}
           />
         ))}
         {isAdding ? (

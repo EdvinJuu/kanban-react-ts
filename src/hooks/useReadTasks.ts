@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Task } from "../types/types";
+import api from "../services/api";
 
 const API_URL = "http://localhost:5000/api/tasks";
 
@@ -14,11 +15,9 @@ export const useReadTasks = () => {
       setError(null)
 
       try {
-        const response = await fetch(API_URL);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        console.log("data fetched")
-        const data = await response.json();
-        setContent(data);
+        const response = await api.get<Task[]>("/tasks");
+        setContent(response.data);
+         
       } catch (error) {
         console.error(error);
         setError("Could not load tasks. Is the backend running?");

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import type { Task, TaskRecursionProps } from "../types/types";
-import { EditIcon, CheckIconInactive } from "./elements/Icons";
+import { EditIcon, CheckIconInactive, CheckIconActive } from "./elements/Icons";
 import { useCreateTasks } from "../hooks/useCreateTask";
 import { useDeleteTask } from "../hooks/useDeleteTask";
 import { useUpdateTask } from "../hooks/useUpdateTask";
@@ -11,9 +11,11 @@ const TaskCard = ({
   taskMap,
   depth,
   maxDepth,
+  isCompleted,
   onTasksAdded,
   onTaskDeleted,
   onTaskUpdated,
+  onTaskChanged,
 }: TaskRecursionProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
@@ -26,8 +28,6 @@ const TaskCard = ({
 
   const children = taskMap.get(id) ?? null;
 
-  /* const children = taskMap.get(id) ?? null; */
-
   function handleEditOnClick(
     e: React.MouseEvent<HTMLElement, MouseEvent>,
     editingState: boolean,
@@ -37,7 +37,6 @@ const TaskCard = ({
   }
 
   async function handleAddTaskOnClick(e: React.MouseEvent) {
-    // do i need to have 2 functions at different levels? can I combine them?
     e.stopPropagation();
     if (addTaskDescription.trim().length <= 0)
       return console.error("You need to add a description");
@@ -77,18 +76,38 @@ const TaskCard = ({
   async function handleUpdateTaskOnClick(e: React.MouseEvent) {
     e.stopPropagation();
 
-    const trimmed = editedDescription.trim()
+    const trimmed = editedDescription.trim();
 
     if (!trimmed || trimmed === description) {
-      setEditedDescription(description)
+      setEditedDescription(description);
       setIsEditing(false);
-      return
+      return;
     }
-    const updated = await updateTask(id, {description: editedDescription});
-  
-      if (updated) {
+    const updated = await updateTask(id, { description: editedDescription });
+
+    if (updated) {
       onTaskUpdated(updated);
       setIsEditing(false);
+    }
+  }
+
+  async function handleToggleCompletedOnClick(e: React.MouseEvent) {
+    e.stopPropagation();
+
+    // cache the old state in previous and create the expected flip in next
+    const previous = isCompleted;
+    const next = !isCompleted; // This is the expected flip
+
+    // give the task in saved task state the expected flip
+    onTaskChanged(id, { isCompleted: next });
+
+    // Update the task on server with the expected flip
+    const updated = await updateTask(id, { isCompleted: next });
+
+    // If we do not manage to update the task on server use "previous" to revert to old state
+    if (!updated) {
+      console.log("Could not save, please try again.") // UPDATE THIS WITH BETTER UX, MAYBE USE ERROR FROM DATA BOUNDARY?
+      onTaskChanged(id, { isCompleted: previous });
     }
   }
 
@@ -99,6 +118,9 @@ const TaskCard = ({
       onDoubleClick={(e) => handleEditOnClick(e, true)}
     >
       <div className=" flex w-full mb-5">
+        <button onClick={handleToggleCompletedOnClick}>
+          {isCompleted ? <CheckIconActive /> : <CheckIconInactive />}
+        </button>
         {isEditing ? (
           <input
             className={`${depth % 2 === 0 ? `bg-secondary` : `bg-primary`} w-full`}
@@ -114,9 +136,7 @@ const TaskCard = ({
           </button>
         )}
       </div>
-      {/*       Task ID: {id}
-      {parentId != null && <p>parent ID: {parentId}</p>}
-      <p>Depth: {depth}</p> */}
+
       {children && depth < maxDepth && (
         <ul className="mb-2 flex flex-col gap-3">
           {children.map((child) => (
@@ -133,6 +153,7 @@ const TaskCard = ({
               onTasksAdded={onTasksAdded}
               onTaskDeleted={onTaskDeleted}
               onTaskUpdated={onTaskUpdated}
+              onTaskChanged={onTaskChanged}
             />
           ))}
         </ul>
