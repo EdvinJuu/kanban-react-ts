@@ -4,8 +4,6 @@ import Board from "../components/Board";
 import DataBoundary from "../components/DataBoundary";
 import type { Task } from "../types/types";
 
-// DOUBLE CHECK CORRECT COMPONENT FUNCTION CONVENTION IS USED
-
 const Home = () => {
   const { content, setContent, isLoading, error } = useReadTasks();
 
@@ -54,7 +52,6 @@ const Home = () => {
           }, new Map<number | null, Task[]>());
           return (
             <Board
-              title="YAAS!"
               tasks={tasksMapped}
               id={1}
               onTasksAdded={handleTaskAdded}

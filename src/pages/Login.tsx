@@ -44,39 +44,43 @@ const Login = () => {
     }
   }
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>{mode === "login" ? "Log in" : "Create Account"}</h1>
-      <input
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        placeholder="Username"
-        autoComplete="username"
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password (min. 8 characters)"
-        autoComplete={mode === "login" ? "current-password" : "new-password"}
-      />
+    <form
+      onSubmit={handleSubmit}
+      className="w-fit border m-auto mt-[20vh] rounded-lg p-6 "
+    >
+      <h1 className="border w-fit m-auto mb-5">Welcome to my recursive Kanban!</h1>
+      <div>
+        <input
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Username"
+          autoComplete="username"
+        />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password (min. 8 characters)"
+          autoComplete={mode === "login" ? "current-password" : "new-password"}
+        />
+      </div>
 
       {error && <p role="alert">{error}</p>}
+      <div className="flex justify-between">
+        <button type="submit" disabled={isSubmitting}>
+          {mode === "login" ? "Log in" : "Create account"}
+        </button>
 
-      <button type="submit" disabled={isSubmitting}>
-        {mode === "login" ? "Log in" : "Create account"}
-      </button>
-
-      <button
-        type="button"
-        onClick={() => {
-          setMode(mode === "login" ? "register" : "login");
-          setError(null);
-        }}
-      >
-        {mode === "login"
-          ? "No account? Create one"
-          : "Have an account? Log in"}
-      </button>
+        <button
+          type="button"
+          onClick={() => {
+            setMode(mode === "login" ? "register" : "login");
+            setError(null);
+          }}
+        >
+          {mode === "login" ? "Create Account" : "Back to Log in"}
+        </button>
+      </div>
     </form>
   );
 };

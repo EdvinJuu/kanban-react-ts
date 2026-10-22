@@ -1,4 +1,6 @@
 
+export type ThemeType = "lavender" | "cyanic" | "jungle" | "scarlet" | "light" | "dark";
+
 export interface Task {
   id: number;
   parentId: number | null;
@@ -19,7 +21,6 @@ export interface TaskRecursionProps extends Task {
 
 export interface BoardProps {
   id: number;
-  title: string;
   tasks: Map<number | null, Task[]>;
   onTasksAdded: (task: Task) => void;
   onTaskDeleted: (deletedIds: number[]) => void;

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import type { Task, TaskRecursionProps } from "../types/types";
-import { EditIcon, CheckIconInactive, CheckIconActive } from "./elements/Icons";
+import type { TaskRecursionProps } from "../types/types";
+import { EditIcon, CheckIcon } from "./elements/Icons";
 import { useCreateTasks } from "../hooks/useCreateTask";
 import { useDeleteTask } from "../hooks/useDeleteTask";
 import { useUpdateTask } from "../hooks/useUpdateTask";
+import { useTheme } from "../context/ThemeContext";
+import { cardLevelColor, iconColor } from "../utils/themeUtils";
 
 const TaskCard = ({
   description,
@@ -22,6 +24,7 @@ const TaskCard = ({
   const [editedDescription, setEditedDescription] = useState(description);
   const [addTaskDescription, setAddTaskDescription] = useState("");
 
+  const { theme } = useTheme();
   const { createTask } = useCreateTasks();
   const { deleteTask } = useDeleteTask();
   const { updateTask } = useUpdateTask();
@@ -75,7 +78,6 @@ const TaskCard = ({
 
   async function handleUpdateTaskOnClick(e: React.MouseEvent) {
     e.stopPropagation();
-
     const trimmed = editedDescription.trim();
 
     if (!trimmed || trimmed === description) {
@@ -94,41 +96,51 @@ const TaskCard = ({
   async function handleToggleCompletedOnClick(e: React.MouseEvent) {
     e.stopPropagation();
 
-    // cache the old state in previous and create the expected flip in next
+    // caches the old state in previous and create the expected flip in next
     const previous = isCompleted;
     const next = !isCompleted; // This is the expected flip
 
-    // give the task in saved task state the expected flip
+    // gives the task in saved task state the expected flip
     onTaskChanged(id, { isCompleted: next });
 
-    // Update the task on server with the expected flip
+    // Updates the task on server with the expected flip
     const updated = await updateTask(id, { isCompleted: next });
 
     // If we do not manage to update the task on server use "previous" to revert to old state
     if (!updated) {
-      console.log("Could not save, please try again.") // UPDATE THIS WITH BETTER UX, MAYBE USE ERROR FROM DATA BOUNDARY?
+      console.log("Could not save, please try again."); // UPDATE THIS WITH BETTER UX, MAYBE USE ERROR FROM DATA BOUNDARY?
       onTaskChanged(id, { isCompleted: previous });
     }
   }
 
+  
   return (
     <li
-      className={`${depth % 2 === 0 ? `bg-primary` : `bg-secondary`}
-      py-1 px-4 min-w-60 h-fit text-accent rounded-xl ${isEditing ? `border border-amber-600` : ""}`}
+      className={` py-1 px-2 pl-1 h-fit text-text rounded-xl ${isEditing ? ` border-2 border-black` : ""}`}
+      style={{ backgroundColor: cardLevelColor(theme, depth) }}
       onDoubleClick={(e) => handleEditOnClick(e, true)}
     >
       <div className=" flex w-full mb-5">
-        <button onClick={handleToggleCompletedOnClick}>
-          {isCompleted ? <CheckIconActive /> : <CheckIconInactive />}
+        <button className="mr-2" onClick={handleToggleCompletedOnClick}>
+          <CheckIcon
+            color={
+              isCompleted
+                ? iconColor(theme)
+                : theme === "light"
+                  ? "#222222"
+                  : "#444444"
+            }
+          />
         </button>
         {isEditing ? (
-          <input
-            className={`${depth % 2 === 0 ? `bg-secondary` : `bg-primary`} w-full`}
+          <textarea
+            className={`bg-primary
+            w-40 h-full rounded-lg field-sizing-content resize-none`}
             value={editedDescription}
             onChange={(e) => setEditedDescription(e.target.value)}
           />
         ) : (
-          <p>{editedDescription}</p>
+          <p className="w-40">{editedDescription}</p>
         )}
         {isEditing && (
           <button onClick={(e) => handleEditOnClick(e, false)}>
@@ -170,27 +182,29 @@ const TaskCard = ({
             <button onClick={(e) => handleAddTaskOnClick(e)}>Add Task</button>
           </div>
         ) : (
-          <p
-            className="p-2 text-sm text-gray-300"
-            onClick={() => {
-              setIsAdding(true);
-              setAddTaskDescription("");
-            }}
-          >
-            Add new card ...
-          </p>
+          <>
+            <p
+              className="p-2 text-sm text-gray-300"
+              onClick={() => {
+                setIsAdding(true);
+                setAddTaskDescription("");
+              }}
+            >
+              Add new card ...
+            </p>
+            <button onClick={(e) => handleDeleteTaskOnClick(e)}>
+              Delete Task
+            </button>
+            {editedDescription !== description ? (
+              <button onClick={(e) => handleUpdateTaskOnClick(e)}>
+                Update Task
+              </button>
+            ) : (
+              <p>Update Task</p>
+            )}
+          </>
         ))}
-      <button onClick={(e) => handleDeleteTaskOnClick(e)}>Delete Task</button>
-      <button onClick={(e) => handleUpdateTaskOnClick(e)}>Update Task</button>
     </li>
-
-    /*       {isParent && <div>
-        <input
-          placeholder="Write task description"
-          onChange={(e) => setAddTaskDescription(e.target.value)}
-        />
-        <button onClick={handleAddTaskOnClick}>Add Task</button>
-      </div>} */
   );
 };
 

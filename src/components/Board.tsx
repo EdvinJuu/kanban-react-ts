@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useCreateTasks } from "../hooks/useCreateTask";
 
 const Board = ({
-  title,
   tasks,
   onTasksAdded,
   onTaskDeleted,
@@ -33,8 +32,7 @@ const Board = ({
   }
 
   return (
-    <div className="border w-fit">
-      <h1>{title}</h1>
+    <div className={`mt-10 mx-auto w-fit`}>
       <ul className="flex gap-3">
         {(tasks.get(null) ?? []).map((child: Task) => (
           <TaskCard
@@ -54,12 +52,12 @@ const Board = ({
           />
         ))}
         {isAdding ? (
-          <div>
-            <input
+          <div className="">
+            <textarea
               onChange={(e) => setAddTaskDescription(e.target.value)}
-              type="text"
               placeholder="Enter a description"
-            ></input>
+              className="w-40 rounded-lg field-sizing-content resize-none border"
+            />
             <button onClick={handleAddTaskOnClick}>Add Task</button>
           </div>
         ) : (
