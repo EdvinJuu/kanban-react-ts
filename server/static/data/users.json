@@ -40,5 +40,11 @@
     "username": "admin",
     "salt": "fd9daa77a4647c6655bf8ca7218b6022",
     "hash": "b09db9cb9b172ec6b8e77227f793c0a8f829a59cb11bacbc02b20a373ded50399b7399dd607569967ced41ac133a5516cc5e472beb00e2c14c3eb3b5ffebe2e3"
+  },
+  {
+    "id": 8,
+    "username": "YOLO",
+    "salt": "4b2ed3d5bd84164588e8ca5b5d5b0793",
+    "hash": "47b2dae70ed3816bb53d5cf8d5f8052fc7acc0ce8b3326a647573410ae2309abaf80ee668fc82532f217cdf0665d57e37d47eeddb231ecbaf2e3870afd7857be"
   }
 ]

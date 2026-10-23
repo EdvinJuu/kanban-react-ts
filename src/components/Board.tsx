@@ -1,6 +1,6 @@
 import type { BoardProps, Task } from "../types/types";
 import TaskCard from "../components/TaskCard";
-import { useState, useId, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useCreateTasks } from "../hooks/useCreateTask";
 import { PlusIcon } from "./elements/Icons";
 
@@ -12,7 +12,6 @@ const Board = ({
   onTaskChanged,
 }: BoardProps) => {
   const [addTaskDescription, setAddTaskDescription] = useState("");
-  const [isAdding, setIsAdding] = useState(false);
   const [isHovered, setIsHovered] = useState<number | null>(null);
   const [failedButton, setFailedButton] = useState<"save" | "add" | null>(null);
 

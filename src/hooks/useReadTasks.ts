@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import type { Task } from "../types/types";
 import api from "../services/api";
 
-const API_URL = "http://localhost:5000/api/tasks";
-
 export const useReadTasks = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [content, setContent] = useState<Task[] | null>(null);
