@@ -47,33 +47,69 @@ Website is designed to work with screen readers and be accessible. There is a sy
 
 * React 19 + Typescript + Vite
 * Tailwind CSS v4 + React Router + Axios
-
 * Express backend with JSON file storage
 
 ## Project Structure
 
-Root/
+Most of the structure follows a standard React-Vite kanban project structure.
 
-server/
+What differs is the recursive structure. The best way to show it is to follow the task from server to display.
 
-src/
+The task journey.
 
-Server has it's own package.json with express and CORS. This way there won't be any unnecessary packages installed in the backend.
+* The tasks are stored per user in a flat json object on the server.
+* The json tasklist is then fetched by the frontend.
+* It will then be mapped into a tree at the top-parent level (Home component) and passed down to Board
+* In Board, the task Map is looped through looking for the top level tasks(depth=Null) and then each top-level task is rendered, the Task Map is passed down to each task(TaskCard).
+* Inside TaskCard the same Loop-Map operation happens again but this time we are comparing the ID of the parent with the parentId prop and if it's the same it is rendered.
+* This then repeats recursively until there are no more matches between Id === parentId and the recursiveness stops OR the hardcoded maxDepth limit kicks in and stops the child tasks from being rendered and stops the recursiveness.
 
-added vite ignore for server to avoid page reloading when tasks updates.
+## API Reference
+
+Table of endpoints:
+
+* POST /api/register/POST
+* POST /api/login
+* GET/POST/PUT/DELETE /api/tasks
+
+All "api/tasks" endpoints require a bearer token which you get when logging in.
+
+The Axios interceptor handles the login attempts and attaching the tokens.
+
+Currently all tokens are stored in localStorage which is not secure so has to be upgraded if I want to continue developing the backend.
+
+The tokens are also very basic in most ways.
+
+## Architecture and Decisions
+
+Each hook is it's own file in order to keep the structure clean and to easily control what errors to pass to the DataBoundary.
+
+Server has it's own package.json with express and CORS. This way there won't be any unnecessary packages installed in the backend.+
+
+Vite ignore for server is added to avoid page reloading when tasks updates.
 
 This is because data file lives inside of the project that Vite is watching (kanban-react-ts). This problem fixes itself when the DB lives outside of the project in future and bigger projects.
 
-Checkbox has optimistic updating, which means updating the task before it reaches the server and
-reverting the update if it fails
+vercel.json - Since we start on the login page this helps vercel reroute when refreshing page, otherwise it will 404
+
+--
+
+Checkbox has optimistic updating, which means updating the task before it reaches the server and reverting the update if it fails. It is one of many things learned on this project which felt very useful, but to keep within the scope i limited this only to the checkbox calls.
 
 fonts installed with Fontsource
 npm install @fontsource-variable/roboto
 import added in main.tsx
 
-added minimum-scale=1 to index.html to stop browser uncontrolled scaling behaviour
+added minimum-scale=1 to index.html to stop browser uncontrolled scaling behaviour.
 
-QUESTIONS TO ANSWER:
-Why server has it's own package.json?
+The server has its own package.json so the backend doesn't have to install a bunch of libraries and packages it won't use, and that goes for the frontend too.
 
-Why not add createTask and deleteTask handlers to context instead of prop drilling?
+## Closing thoughts
+
+Addressing the UI....
+
+I put a lot of my focus of the UX in how the user navigates the app and not too much thought in the color scheme. I also decided late in the project to implement the theme system and, to be honest, had a bit too much fun implmenting features for it which ended up with maybe not so nice looking, but fun gradients that doesn't follow the contrast rules.
+
+The idea is to take all the features I have learned about themes and with proper research implement them in a future project.
+
+Anyway thanks for reading!
