@@ -7,7 +7,6 @@ import type { Task } from "../types/types";
 const Home = () => {
   const { content, setContent, isLoading, error } = useReadTasks();
 
-
   const handleTaskAdded = (task: Task) => {
     setContent([...(content ?? []), task]); // either add task to the other content or an empty list if no content
   };
@@ -30,17 +29,17 @@ const Home = () => {
   };
 
   // This function allows for optimistic updating (updating task before it reaches the server)
-  const handleTaskChanged = (id: number, changes:Partial<Task>) => { // Partial makes all the props optional
+  const handleTaskChanged = (id: number, changes: Partial<Task>) => {
+    // Partial makes all the props optional
     setContent((prev) =>
       // if currentTask matches task, spread the task props and combine with props from changes (updating the props)
       // So, ...t then ...changes overwrites the spread props they share.
-    (prev ?? []).map((t) => (t.id === id ? {...t, ...changes} : t)),
+      (prev ?? []).map((t) => (t.id === id ? { ...t, ...changes } : t)),
     );
-
-  }
+  };
 
   return (
-    <>
+    <div>
       <Navbar />
       <DataBoundary data={content} isLoading={isLoading} error={error}>
         {(taskData) => {
@@ -62,8 +61,7 @@ const Home = () => {
           );
         }}
       </DataBoundary>
-      {/* <Board title="Boared heheeh" id={0} /> */}
-    </>
+    </div>
   );
 };
 

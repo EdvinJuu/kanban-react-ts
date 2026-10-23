@@ -1,14 +1,14 @@
-import clsx from "clsx";
 import type { ThemeType } from "../types/types";
 
-export function iconColor(theme: ThemeType) {
-  if (theme === "cyanic") return "#DBE227";
-  if (theme === "scarlet") return "#59A8E8";
-  if (theme === "lavender") return "#3DD770";
-  if (theme === "jungle") return "#A84BD3";
-  if (theme === "light") return "#28B256";
-  if (theme === "dark") return "#A84BD3";
-  return "#ffffff";
+
+// alternative colouring method, too many drawbacks though to be used on cards though. (can't do depth % 2)
+export function levelAccent(depth: number, variableName: string, hueShift: number = 8, depthShift: number = 2) {
+  // from var(--accent) splits that variable colour into the hsl channels
+  return `hsl(from var(${variableName}) 
+  calc(
+  h + 0 + ${depth * hueShift}) 
+  s 
+  calc(l + ${depth * depthShift}))`;
 }
 
 export function cardLevelColor(theme: ThemeType, depth: number) {
@@ -40,3 +40,14 @@ export function cardLevelColor(theme: ThemeType, depth: number) {
   if (theme === "light") return clsx(``);
   if (theme === "dark") return clsx(`dark`);
 }; */
+
+// Deprecated since swapping to [data-theme="x"]
+/* export function iconColor(theme: ThemeType) {
+  if (theme === "cyanic") return "#DBE227";
+  if (theme === "scarlet") return "#59A8E8";
+  if (theme === "lavender") return "#3DD770";
+  if (theme === "jungle") return "#A84BD3";
+  if (theme === "light") return "#28B256";
+  if (theme === "dark") return "#A84BD3";
+  return "#ffffff";
+} */

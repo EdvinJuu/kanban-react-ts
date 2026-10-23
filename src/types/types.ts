@@ -11,6 +11,8 @@ export interface Task {
   onTaskDeleted: (deletedIds: number[]) => void;
   onTaskUpdated: (updated: Task) => void;
   onTaskChanged: (id: number, changes: Partial<Task>) => void;
+  isHovered: number | null;
+  setIsHovered: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 export interface TaskRecursionProps extends Task {

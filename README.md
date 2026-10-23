@@ -15,6 +15,13 @@ This is because data file lives inside of the project that Vite is watching (kan
 Checkbox has optimistic updating, which means updating the task before it reaches the server and
 reverting the update if it fails
 
+fonts installed with Fontsource 
+npm install @fontsource-variable/roboto
+import added in main.tsx
+
+
+added minimum-scale=1 to index.html to stop browser uncontrolled scaling behaviour 
+
 QUESTIONS TO ANSWER:
 Why server has it's own package.json?
 
