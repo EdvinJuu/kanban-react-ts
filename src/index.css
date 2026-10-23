@@ -16,7 +16,7 @@
 :root,
 [data-theme="light"] {
   --primary: #fff;
-  --primary-pale: #fff;
+  --primary-pale: #726b6b;
   --secondary: #af8674;
   --detail-accent: #fff;
   --detail-accent-pale: #000000;

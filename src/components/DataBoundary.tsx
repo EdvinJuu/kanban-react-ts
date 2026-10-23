@@ -15,9 +15,9 @@ function DataBoundary<T>({
   data,
   children,
 }: DataBoundaryProps<T>) {
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <p className="text-detail-accent-pale">Loading...</p>;
   if (error) {
-    return <p>{error}</p>;
+    return <p className="text-detail-accent-pale">{error}</p>;
   }
   if (data === null) {
     return null;
