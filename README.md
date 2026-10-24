@@ -112,4 +112,8 @@ I put a lot of my focus of the UX in how the user navigates the app and not too 
 
 The idea is to take all the features I have learned about themes and with proper research implement them in a future project.
 
+AI use in the project:
+
+95% is written by hand by me, and the last 5% is copied, but I never copy anything I can't do myself. I have gotten a lot of assistance with explaning and showing patterns, but it is important for me to write in order for the knowledge to stick.
+
 Anyway thanks for reading!
